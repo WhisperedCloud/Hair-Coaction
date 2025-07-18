@@ -11,7 +11,8 @@ import {
   Menu,
   X,
   ChevronRight,
-  LogOut
+  LogOut,
+  Stethoscope
 } from 'lucide-react';
 import { Link } from "react-router-dom";
 
@@ -27,6 +28,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => {
   const navigationItems = [
     { id: 'dashboard', label: 'Dashboard', icon: Home, color: 'from-pink-500 to-rose-400', path: '/' },
     { id: 'education', label: 'Education', icon: BookOpen, color: 'from-orange-400 to-pink-400', path: '/education' },
+    { id: 'consultation', label: 'Consultation', icon: Stethoscope, color: 'from-pink-500 to-rose-400', path: '/consultation' },
   ];
 
   const quickActions = [

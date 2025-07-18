@@ -5,14 +5,15 @@ import Consultant from "./components/Consultation";
 
 function App() {
   return (
-    // <BrowserRouter>
-    //   <Routes>
-    //     <Route path="/" element={<Home />} />
-    //     <Route path="/education" element={<Education />} />
-    //   </Routes>
-    // </BrowserRouter>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/education" element={<Education />} />
+        <Route path="/consultation" element={<Consultant />} />
+      </Routes>
+    </BrowserRouter>
 
-    <Consultant/>
+    
   );
 }
 
