@@ -12,7 +12,8 @@ import {
   X,
   ChevronRight,
   LogOut,
-  Stethoscope
+  Stethoscope,
+  Users
 } from 'lucide-react';
 import { Link } from "react-router-dom";
 
@@ -29,11 +30,12 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => {
     { id: 'dashboard', label: 'Dashboard', icon: Home, color: 'from-pink-500 to-rose-400', path: '/' },
     { id: 'education', label: 'Education', icon: BookOpen, color: 'from-orange-400 to-pink-400', path: '/education' },
     { id: 'consultation', label: 'Consultation', icon: Stethoscope, color: 'from-pink-500 to-rose-400', path: '/consultation' },
+    { id: 'event', label: 'Event', icon: Calendar, color: 'from-orange-400 to-pink-500', path: '/event' },
+    { id: 'community', label: 'Community', icon: Users, color: 'from-purple-500 to-pink-500', path: '/community' }, // Added Community section
   ];
 
   const quickActions = [
     { id: 'profile', label: 'Profile', icon: User },
-    { id: 'notifications', label: 'Notifications', icon: Bell },
     { id: 'settings', label: 'Settings', icon: Settings },
   ];
 
@@ -139,7 +141,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => {
           isCollapsed ? 'w-20' : 'w-80'
         } ${
           isMobileOpen ? 'translate-x-0' : '-translate-x-full'
-        } lg:translate-x-0 animate-slideInLeft`}
+        } lg:translate-x-0 animate-slideInLeft flex flex-col`}
       >
         {/* Header */}
         <div className="p-6 border-b border-pink-100 bg-white/50 backdrop-blur-sm">
@@ -152,9 +154,9 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => {
                   </div>
                   <div>
                     <h1 className="text-xl font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent">
-                      HairCare
+                      Hair Coaction
                     </h1>
-                    <p className="text-sm text-gray-600">Dashboard</p>
+                    <p className="text-sm text-gray-600">Hair Care</p>
                   </div>
                 </div>
               </div>
@@ -168,83 +170,100 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => {
           </div>
         </div>
 
-        {/* Quick Stats */}
-        {!isCollapsed && (
-          <div className="p-6 animate-fadeIn">
-            <h3 className="text-sm font-semibold text-gray-700 mb-4 uppercase tracking-wide">Quick Stats</h3>
-            <div className="space-y-3">
-              {stats.map((stat, index) => (
-                <div
-                  key={stat.label}
-                  className="bg-white/70 backdrop-blur-sm rounded-xl p-4 hover-lift animate-scaleIn"
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <div className="flex items-center space-x-3">
-                    <div className={`bg-gradient-to-r ${stat.gradient} w-10 h-10 rounded-lg flex items-center justify-center shadow-md`}>
-                      <stat.icon className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-600">{stat.label}</p>
-                      <p className="font-bold text-gray-800">{stat.value}</p>
+        {/* Scrollable Content */}
+        <div className="flex-1 overflow-y-auto min-h-0">
+          {/* Quick Stats */}
+          {!isCollapsed && (
+            <div className="p-6 animate-fadeIn">
+              <h3 className="text-sm font-semibold text-gray-700 mb-4 uppercase tracking-wide">Quick Stats</h3>
+              <div className="space-y-3">
+                {stats.map((stat, index) => (
+                  <div
+                    key={stat.label}
+                    className="bg-white/70 backdrop-blur-sm rounded-xl p-4 hover-lift animate-scaleIn"
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <div className={`bg-gradient-to-r ${stat.gradient} w-10 h-10 rounded-lg flex items-center justify-center shadow-md`}>
+                        <stat.icon className="w-5 h-5 text-white" />
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600">{stat.label}</p>
+                        <p className="font-bold text-gray-800">{stat.value}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Navigation */}
+          <div className="px-6 py-4">
+            <h3 className={`text-sm font-semibold text-gray-700 mb-4 uppercase tracking-wide ${isCollapsed ? 'text-center' : ''}`}>
+              {isCollapsed ? '•••' : 'Navigation'}
+            </h3>
+            <nav className="space-y-2">
+              {navigationItems.map((item, index) => (
+                <Link
+                  key={item.id}
+                  to={item.path}
+                  onClick={() => {
+                    setActiveTab(item.id);
+                    setIsMobileOpen(false);
+                  }}
+                  className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl font-medium transition-all duration-300 hover-lift animate-scaleIn ${
+                    activeTab === item.id
+                      ? `bg-gradient-to-r ${item.color} text-white shadow-lg`
+                      : 'text-gray-700 hover:bg-white/70 hover:text-gray-900'
+                  } ${isCollapsed ? 'justify-center' : ''}`}
+                  style={{ animationDelay: `${index * 0.05}s` }}
+                >
+                  <item.icon className="w-5 h-5" />
+                  {!isCollapsed && <span>{item.label}</span>}
+                  {!isCollapsed && activeTab === item.id && (
+                    <div className="ml-auto">
+                      <div className="w-2 h-2 bg-white rounded-full animate-pulse-gentle" />
+                    </div>
+                  )}
+                </Link>
+              ))}
+            </nav>
+          </div>
+
+          {/* Quick Actions */}
+          <div className="px-6 py-4 border-t border-pink-100 mt-auto">
+            <h3 className={`text-sm font-semibold text-gray-700 mb-4 uppercase tracking-wide ${isCollapsed ? 'text-center' : ''}`}>
+              {isCollapsed ? '•••' : 'Quick Actions'}
+            </h3>
+            <div className="space-y-2">
+              {quickActions.map((action, index) => (
+                action.id === 'profile' ? (
+                  <Link
+                    key={action.id}
+                    to="/profile"
+                    className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-gray-700 hover:bg-white/70 hover:text-gray-900 transition-all duration-300 hover-lift animate-scaleIn ${
+                      isCollapsed ? 'justify-center' : ''
+                    }`}
+                    style={{ animationDelay: `${index * 0.05}s` }}
+                  >
+                    <action.icon className="w-5 h-5" />
+                    {!isCollapsed && <span>{action.label}</span>}
+                  </Link>
+                ) : (
+                  <button
+                    key={action.id}
+                    className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-gray-700 hover:bg-white/70 hover:text-gray-900 transition-all duration-300 hover-lift animate-scaleIn ${
+                      isCollapsed ? 'justify-center' : ''
+                    }`}
+                    style={{ animationDelay: `${index * 0.05}s` }}
+                  >
+                    <action.icon className="w-5 h-5" />
+                    {!isCollapsed && <span>{action.label}</span>}
+                  </button>
+                )
               ))}
             </div>
-          </div>
-        )}
-
-        {/* Navigation */}
-        <div className="px-6 py-4">
-          <h3 className={`text-sm font-semibold text-gray-700 mb-4 uppercase tracking-wide ${isCollapsed ? 'text-center' : ''}`}>
-            {isCollapsed ? '•••' : 'Navigation'}
-          </h3>
-          <nav className="space-y-2">
-            {navigationItems.map((item, index) => (
-              <Link
-                key={item.id}
-                to={item.path}
-                onClick={() => {
-                  setActiveTab(item.id);
-                  setIsMobileOpen(false);
-                }}
-                className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl font-medium transition-all duration-300 hover-lift animate-scaleIn ${
-                  activeTab === item.id
-                    ? `bg-gradient-to-r ${item.color} text-white shadow-lg`
-                    : 'text-gray-700 hover:bg-white/70 hover:text-gray-900'
-                } ${isCollapsed ? 'justify-center' : ''}`}
-                style={{ animationDelay: `${index * 0.05}s` }}
-              >
-                <item.icon className="w-5 h-5" />
-                {!isCollapsed && <span>{item.label}</span>}
-                {!isCollapsed && activeTab === item.id && (
-                  <div className="ml-auto">
-                    <div className="w-2 h-2 bg-white rounded-full animate-pulse-gentle" />
-                  </div>
-                )}
-              </Link>
-            ))}
-          </nav>
-        </div>
-
-        {/* Quick Actions */}
-        <div className="px-6 py-4 border-t border-pink-100 mt-auto">
-          <h3 className={`text-sm font-semibold text-gray-700 mb-4 uppercase tracking-wide ${isCollapsed ? 'text-center' : ''}`}>
-            {isCollapsed ? '•••' : 'Quick Actions'}
-          </h3>
-          <div className="space-y-2">
-            {quickActions.map((action, index) => (
-              <button
-                key={action.id}
-                className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-gray-700 hover:bg-white/70 hover:text-gray-900 transition-all duration-300 hover-lift animate-scaleIn ${
-                  isCollapsed ? 'justify-center' : ''
-                }`}
-                style={{ animationDelay: `${index * 0.05}s` }}
-              >
-                <action.icon className="w-5 h-5" />
-                {!isCollapsed && <span>{action.label}</span>}
-              </button>
-            ))}
           </div>
         </div>
 
