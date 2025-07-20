@@ -4,7 +4,8 @@ import type React from "react"
 import { useState, type ReactNode, useLayoutEffect, useRef, useCallback } from "react"
 import Sidebar from "./Sidebar"
 import Lenis from "lenis"
-import "./ScrollStack.css"
+import './ScrollStack.css';
+
 import {
   BookOpen,
   Video,
